@@ -1,0 +1,175 @@
+/* Container for the map */
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+  padding: 30px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  border-radius: 20px;
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05), 0 10px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+  width: 100%;
+  max-width: 1800px;
+  margin: auto;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Make the map almost full width */
+.india-map {
+  width: 98%;
+  height: auto;
+  max-height: 85vh;
+  transition: transform 0.4s ease-in-out;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+}
+
+/* State styling */
+.india-map path {
+  fill: #f9a825;
+  stroke: #ffffff;
+  stroke-width: 1;
+  transition: transform 0.3s ease, fill 0.3s ease, filter 0.3s ease;
+  transform-origin: center;
+  cursor: pointer;
+}
+
+/* Hover effect */
+
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  transition: top 0.05s ease, left 0.05s ease, opacity 0.2s ease-in-out;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Entry animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1280px) {
+  .map-container {
+    height: auto;
+    padding: 20px;
+  }
+
+  .india-map {
+    width: 100%;
+    height: 75vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    padding: 10px;
+    height: auto;
+  }
+
+  .india-map {
+    width: 100%;
+    height: 65vh;
+  }
+
+  .tooltip {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+.map-controls {
+  position: absolute;
+  top: 80px; /* below the navbar */
+  right: 30px;
+  z-index: 9999; /* ensure it stays above everything */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.map-controls button {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.map-controls button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+/* Welcome Banner */
+/* Stylish Banner (Flow Layout - not absolute) */
+.map-welcome-banner {
+  margin-bottom: 20px;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #f8fafc;
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.2), rgba(2, 132, 199, 0.2));
+  padding: 18px 36px;
+  border-radius: 14px;
+  text-align: center;
+  width: 100%;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+  font-family: 'Segoe UI', sans-serif;
+  animation: glowFade 3s ease-in-out infinite alternate, fadeInBanner 1s ease;
+  backdrop-filter: blur(6px);
+}
+
+@keyframes fadeInBanner {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowFade {
+  from {
+    box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8;
+  }
+  to {
+    box-shadow: 0 0 25px #7dd3fc, 0 0 35px #7dd3fc;
+  }
+}
+
+.highlight {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .map-welcome-banner {
+    font-size: 1.4rem;
+    padding: 12px 20px;
+  }
+}
+

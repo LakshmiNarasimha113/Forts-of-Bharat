@@ -1,0 +1,30 @@
+.svg-map {
+    width: 100%;
+    max-width: 800px; /* Adjust the max-width as needed */
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+.svg-map path {
+    fill: #4CAF50; /* Greenish base color */
+    stroke: #ffffff;
+    stroke-width: 1.5;
+    transition: fill 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.svg-map path:hover {
+    fill: #ff9800; /* Orange on hover */
+    transform: scale(1.05);
+}
+
+.svg-map path.active {
+    fill: #e91e63 !important; /* Pink for active state */
+}
+
+@media (max-width: 768px) {
+    .svg-map {
+        max-width: 100%;
+    }
+}

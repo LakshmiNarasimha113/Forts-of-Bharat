@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(99, 102, 241, 1);
+  }
+}
+.animate-title-glow {
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 1.5s ease forwards;
+}

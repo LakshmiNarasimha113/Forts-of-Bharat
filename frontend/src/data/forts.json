@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "name": "Chittorgarh Fort",
+      "state": "Rajasthan",
+      "description": "One of the largest forts in India, known for its historical significance.",
+      "image": "/images/chittorgarh.jpg",
+      "location": { "lat": 24.8887, "lng": 74.6269 }
+    },
+    {
+      "id": 2,
+      "name": "Golconda Fort",
+      "state": "Telangana",
+      "description": "A fortress known for its rich history and unique acoustic system.",
+      "image": "/images/golconda.jpg",
+      "location": { "lat": 17.3833, "lng": 78.4011 }
+    },
+    {
+      "id": 3,
+      "name": "Red Fort",
+      "state": "Delhi",
+      "description": "A UNESCO World Heritage site and a symbol of India's independence.",
+      "image": "/images/redfort.jpg",
+      "location": { "lat": 28.6562, "lng": 77.2410 }
+    }
+  ]
+  
