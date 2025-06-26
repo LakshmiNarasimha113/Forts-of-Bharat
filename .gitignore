@@ -1,2 +1,13 @@
-node_modules/ 
-.env 
+# Ignore Python virtual environments
+venv/
+_pycache_/
+*.pyc
+
+# Ignore Node modules
+node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore system files
+.DS_Store
