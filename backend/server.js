@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/forisDB', {
+mongoose.connect('mongodb://localhost:27017/fortsDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

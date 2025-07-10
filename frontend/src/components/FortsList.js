@@ -291,7 +291,8 @@ return (
     <div className="birds-animation absolute inset-0 z-10" />
 
     {/* 📦 Forts content layer */}
-    <div className="pt-24 px-6 min-h-screen relative z-20 text-white">
+   <div className="pt-16 px-6 min-h-screen relative z-20 text-white">
+
       <h1
         className="text-4xl font-bold text-center mb-10 text-white drop-shadow-lg capitalize"
         data-aos="fade-down"
@@ -304,26 +305,26 @@ return (
           No forts found for {stateName.replace(/-/g, ' ')}
         </p>
       ) : (
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4">
-          {forts.map((fort, index) => (
-            <Link
-              key={fort._id}
-              to={`/fort/${fort.slug}`}
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
-              className="group p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transform transition duration-300"
-            >
-              <img
-                src={fort.image || '/images/default.jpg'}
-                alt={fort.name}
-                className="w-full h-48 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300"
-              />
-              <h2 className="text-lg font-semibold text-center text-gray-900 dark:text-white">
-                {fort.name}
-              </h2>
-            </Link>
-          ))}
-        </div>
+       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4">
+  {forts.map((fort, index) => (
+    <Link
+      key={fort._id}
+      to={`/fort/${fort.slug}`}
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+      className="group p-5 bg-white/20 dark:bg-gray-900/20 backdrop-blur-xl border border-white/30 dark:border-gray-700/30 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-2 hover:bg-white/30 dark:hover:bg-gray-900/30 transform transition-all duration-300"
+    >
+      <img
+        src={fort.image || '/images/default.jpg'}
+        alt={fort.name}
+        className="w-full h-48 object-cover rounded-2xl mb-4 group-hover:scale-110 group-hover:rotate-1 transition-all duration-300"
+      />
+      <h2 className="text-lg font-semibold text-center text-gray-900 dark:text-white">
+        {fort.name}
+      </h2>
+    </Link>
+  ))}
+</div>
       )}
     </div>
   </div>

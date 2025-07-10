@@ -2,11 +2,11 @@ import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { ThemeContext } from "../context/ThemeContext"; // ✅ Import ThemeContext
+import { ThemeContext } from "../context/ThemeContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { darkMode, toggleTheme } = useContext(ThemeContext); // ✅ Access context
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md px-6 py-3 z-50">
@@ -29,17 +29,29 @@ const Navbar = () => {
           >
             <Link to="/">Home</Link>
           </motion.li>
-          {["Explore", "About", "Contact"].map((item, index) => (
-            <motion.li
-              key={index}
-              whileHover={{ scale: 1.1 }}
-              className="cursor-pointer text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
-            >
-              <Link to={`/${item.toLowerCase()}`}>{item}</Link>
-            </motion.li>
-          ))}
 
-          {/* Theme Toggle Button */}
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className="cursor-pointer text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
+          >
+            <Link to="/explore">Explore</Link>
+          </motion.li>
+
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className="cursor-pointer text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
+          >
+            <Link to="/about">About</Link>
+          </motion.li>
+
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className="cursor-pointer text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
+          >
+            <Link to="/contact">Contact</Link>
+          </motion.li>
+
+          {/* Theme Toggle */}
           <li>
             <button
               onClick={toggleTheme}
@@ -51,18 +63,18 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Buttons */}
         <div className="md:hidden flex items-center space-x-3">
           <button
-            className="text-gray-700 dark:text-gray-200 focus:outline-none"
             onClick={toggleTheme}
+            className="text-gray-700 dark:text-gray-200 focus:outline-none"
           >
             {darkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>
 
           <button
-            className="text-gray-700 dark:text-gray-200 focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
+            className="text-gray-700 dark:text-gray-200 focus:outline-none"
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -79,21 +91,32 @@ const Navbar = () => {
         >
           <Link
             to="/"
-            className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
+            className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400"
             onClick={() => setIsOpen(false)}
           >
             Home
           </Link>
-          {["Explore", "About", "Contact"].map((item, index) => (
-            <Link
-              key={index}
-              to={`/${item.toLowerCase()}`}
-              className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400 transition duration-300"
-              onClick={() => setIsOpen(false)}
-            >
-              {item}
-            </Link>
-          ))}
+          <Link
+            to="/explore"
+            className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400"
+            onClick={() => setIsOpen(false)}
+          >
+            Explore
+          </Link>
+          <Link
+            to="/about"
+            className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400"
+            onClick={() => setIsOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="block text-lg text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400"
+            onClick={() => setIsOpen(false)}
+          >
+            Contact
+          </Link>
         </motion.div>
       )}
     </nav>

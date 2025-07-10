@@ -2,19 +2,23 @@ import React, { useState,useEffect} from "react";
 import "./IndianMap.css";
 import { useNavigate } from "react-router-dom";
 import { Landmark, Sparkles, MapPin } from 'lucide-react';
-
+import fortsData from '../data/fortsData';
 
 const IndianMap = () => {
   const [tooltip, setTooltip] = useState({ visible: false, name: "", x: 0, y: 0 });
   const [scale, setScale] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState("Welcome");
 
+  
+
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting("Good Morning 🌅");
-    else if (hour < 18) setGreeting("Good Afternoon ☀️");
-    else setGreeting("Good Evening 🌇");
+    if (hour < 12) setGreeting("Good Morning ");
+    else if (hour < 18) setGreeting("Good Afternoon ");
+    else setGreeting("Good Evening ");
   }, []);
 
   const handleStateClick = (stateName) => {
@@ -33,6 +37,36 @@ const IndianMap = () => {
     setTooltip({ visible: false, name: "", x: 0, y: 0 });
   };
 
+ const handleSearchChange = (e) => {
+  const query = e.target.value.toLowerCase();
+  setSearchQuery(query);
+
+  const filtered = searchEntries.filter((entry) =>
+    entry.name.toLowerCase().includes(query)
+  );
+  setFilteredResults(query.length > 0 ? filtered : []);
+};
+const searchEntries = Object.entries(fortsData).flatMap(([state, forts]) => {
+  return [
+    { type: "state", name: state, label: `State: ${state}` },
+    ...forts.map(fort => ({
+      type: "fort",
+      name: fort.name,
+      slug: fort.slug,
+      label: `Fort: ${fort.name}`
+    }))
+  ];
+});
+const handleSearchSelect = (item) => {
+  setSearchQuery("");
+  setFilteredResults([]);
+  
+  if (item.type === "state") {
+    navigate(`/forts/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
+  } else if (item.type === "fort") {
+    navigate(`/fort/${item.slug}`);
+  }
+};
 
 
   return (
@@ -46,12 +80,61 @@ const IndianMap = () => {
           <MapPin className="lucide-icon" />
         </div>
         <div className="greeting-text">
-          {greeting}, <span className="explorer">Explorer!</span>
+          {greeting} <span className="explorer">Explorer!</span>
         </div>
         <div className="sub-text">
           Begin your journey through <span className="highlight">Forts of Bharath</span> 🏰
         </div>
       </div>
+      <div style={{ marginTop: "20px", width: "100%" }}>
+          <input
+            type="text"
+            placeholder="Search forts or states..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            style={{
+              padding: "10px 14px",
+              borderRadius: "12px",
+              border: "1px solidrgb(150, 109, 4)",
+              width: "100%",
+              maxWidth: "300px",
+              fontSize: "1rem",
+              outline: "none",
+              backgroundColor: "#1e293b",
+              color: "#f8fafc",
+              boxShadow: "0 0 8px rgba(245, 158, 11, 0.3)",
+            }}
+          />
+          {/* Search Results Dropdown */}
+          {filteredResults.length > 0 && (
+            <ul style={{
+              listStyle: "none",
+              padding: "0",
+              marginTop: "8px",
+              backgroundColor: "#334155",
+              borderRadius: "12px",
+              maxHeight: "180px",
+              overflowY: "auto",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+              color: "#f8fafc",
+            }}>
+              {filteredResults.map((item, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSearchSelect(item)}
+                  style={{
+                    padding: "10px 16px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  }}
+                >
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      
       <div className="flex justify-center mt-6">
       
     </div>

@@ -28,7 +28,7 @@ const HomePage = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          Forts of Bharath Explorer
+          Forts of Bharath 
           <motion.div
             className="absolute bottom-0 left-1/2 w-0 h-1 bg-white rounded-full"
             initial={{ width: 0 }}

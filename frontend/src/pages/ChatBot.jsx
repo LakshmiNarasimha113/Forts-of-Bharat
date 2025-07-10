@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { Send, Mic, Square, Languages, MessageSquare } from 'lucide-react';
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -10,9 +11,17 @@ export default function ChatBot() {
   const [language, setLanguage] = useState('en-IN');
   const [voices, setVoices] = useState([]);
   const [selectedVoiceURI, setSelectedVoiceURI] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load voices
+  const suggestedQueries = [
+    "Tell me about Golkonda Fort",
+    "Best forts to visit in Rajasthan",
+    "History of Raigad Fort",
+    "Forts built by Chhatrapati Shivaji",
+    "Forts with 360° virtual tours"
+  ];
+
   useEffect(() => {
     const loadVoices = () => {
       const allVoices = speechSynthesis.getVoices();
@@ -23,18 +32,29 @@ export default function ChatBot() {
     };
     loadVoices();
     window.speechSynthesis.onvoiceschanged = loadVoices;
-  }, [language]);
+  }, [language, selectedVoiceURI]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatLog]);
 
   const speak = (text) => {
+    speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     const voice = voices.find((v) => v.voiceURI === selectedVoiceURI);
     if (voice) utterance.voice = voice;
     utterance.lang = language;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
     speechSynthesis.speak(utterance);
+  };
+
+  const stopSpeech = () => {
+    speechSynthesis.cancel();
+    setIsSpeaking(false);
   };
 
   const sendMessage = async () => {
@@ -72,27 +92,45 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-indigo-100 via-white to-indigo-200 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-500">
-      <div className="w-full max-w-3xl h-[90vh] flex flex-col bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-3xl shadow-2xl overflow-hidden">
+   <div className="h-screen overflow-hidden flex justify-center items-start pt-16 px-4 bg-gradient-to-br from-[#1e293b] via-[#334155] to-[#0f172a] text-white">
+      <div className="w-full max-w-4xl h-[calc(100vh-4rem)] flex flex-col rounded-3xl overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl shadow-[0_0_60px_-10px_rgba(255,255,255,0.15)] animate-fadeIn">
+        
         {/* Header */}
-        <div className="text-center p-5 border-b border-gray-300 dark:border-gray-700 bg-white/50 dark:bg-slate-800/60">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">🛡️ Forts of Bharath Chat Assistant</h2>
+        <div className="text-center p-6 bg-white/10 border-b border-white/10">
+          <h2 className="text-3xl font-bold text-white drop-shadow tracking-wide">
+            🛡️ Forts of Bharath Chat Assistant
+          </h2>
+          <p className="text-sm text-slate-300 mt-1">Ask anything about Indian forts 🏰</p>
         </div>
 
-        {/* Chat display */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 bg-gradient-to-b from-transparent to-indigo-50 dark:to-slate-900">
+        {/* Suggested Queries */}
+        <div className="flex flex-wrap justify-center gap-3 px-6 pt-4 text-sm">
+          {suggestedQueries.map((query, idx) => (
+            <button
+              key={idx}
+              onClick={() => setMessage(query)}
+              className="px-4 py-2 rounded-full bg-slate-700 hover:bg-slate-800 text-white text-sm flex items-center gap-2 shadow-md transition-all"
+            >
+              <MessageSquare size={16} />
+              {query}
+            </button>
+          ))}
+        </div>
+
+        {/* Chat Window */}
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
           {chatLog.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400 italic mt-10">Ask about any fort in India...</p>
+            <p className="text-center text-slate-400 italic mt-10">Start a conversation about Indian forts...</p>
           )}
           {chatLog.map((entry, index) => (
             <div key={index} className="space-y-2">
-              <div className="text-right">
-                <span className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-tl-3xl rounded-bl-3xl rounded-tr-xl shadow">
+              <div className="text-right animate-fadeInUp">
+                <span className="inline-block bg-indigo-600 text-white px-5 py-2 rounded-2xl shadow-md">
                   {entry.user}
                 </span>
               </div>
-              <div className="text-left">
-                <span className="inline-block bg-gray-200 dark:bg-slate-700 text-gray-900 dark:text-white px-4 py-2 rounded-tr-3xl rounded-br-3xl rounded-tl-xl shadow">
+              <div className="text-left animate-fadeInUp">
+                <span className="inline-block bg-white/20 text-white px-5 py-2 rounded-2xl shadow-inner backdrop-blur-sm">
                   {entry.bot}
                 </span>
               </div>
@@ -101,43 +139,62 @@ export default function ChatBot() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input section */}
-        <div className="p-4 border-t border-gray-300 dark:border-gray-700 bg-white/60 dark:bg-slate-800/70">
+        {/* Input Section */}
+        <div className="p-4 border-t border-white/10 bg-black/10 backdrop-blur-md">
           <div className="flex items-center gap-3">
+            {/* Language Picker */}
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="rounded-lg px-3 py-2 bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white outline-none text-sm"
+              className="rounded-lg px-3 py-2 bg-white/80 text-gray-800 outline-none text-sm shadow-inner"
             >
               <option value="en-IN">English</option>
               <option value="hi-IN">Hindi</option>
               <option value="te-IN">Telugu</option>
             </select>
 
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Ask something about Indian forts..."
-              className="flex-1 px-4 py-2 rounded-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+            {/* Input Field */}
+           <input
+  type="text"
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+  placeholder="Type or speak your question..."
+  className="flex-1 px-4 py-2 rounded-full bg-white/90 text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-md placeholder-slate-500"
+/>
 
+
+            {/* Send Button */}
             <button
               onClick={sendMessage}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full font-semibold transition-all shadow-lg"
-              title="Send"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg transition-all"
+              title="Send Message"
             >
+              <Send size={18} />
               Send
             </button>
 
+            {/* Mic Button */}
             <button
               onClick={handleMicInput}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full transition-all shadow-md"
-              title="Speak"
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
+              title="Start Voice Input"
             >
-              🎙️
+              <Mic size={18} />
+              Speak
             </button>
+
+            {/* Stop Button */}
+            {isSpeaking && (
+              <button
+                onClick={stopSpeech}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
+                title="Stop Speaking"
+              >
+                <Square size={18} />
+                Stop
+              </button>
+            )}
           </div>
         </div>
       </div>

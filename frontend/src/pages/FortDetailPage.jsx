@@ -8,7 +8,8 @@ import 'aos/dist/aos.css';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Captions from "yet-another-react-lightbox/plugins/captions";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails.css";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"; // ✅ plugin
+import "yet-another-react-lightbox/plugins/thumbnails.css"; 
 import AIPhotoBooth from '../components/AIPhotoBooth';
 import ReviewSection from "../components/ReviewSection";
 import TransportBooking from '../components/TransportBooking';
@@ -16,8 +17,8 @@ import Footer from '../components/Footer';
 import translateText from '../utils/translateText';
 
 import {
-  Hammer, Calendar, Landmark, Clock, Coins, MapPin, Globe, Bus, TrainFront,
-  Plane, Car, Map, Info, Train, Sparkles, Video, CalendarCheck, Ruler, Mountain,
+  Hammer, Calendar, Landmark, Clock, Coins, MapPin, Globe, Bus, 
+  Plane,  Info, Train, Sparkles, Video, CalendarCheck, Ruler, Mountain,
   Building2, Globe2
 } from 'lucide-react';
 import {
@@ -153,20 +154,7 @@ const FortDetailPage = () => {
       className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 pt-24 transition-colors duration-300 font-sans"
     >
       {/* 🌐 Language Selector */}
-      <div className="flex justify-end px-6">
-        <select
-          value={selectedLanguage}
-          onChange={(e) => setSelectedLanguage(e.target.value)}
-          className="px-3 py-2 rounded-md border border-indigo-300 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
-        >
-          <option value="en">English</option>
-          <option value="hi">Hindi</option>
-          <option value="te">Telugu</option>
-          <option value="ta">Tamil</option>
-          <option value="ml">Malayalam</option>
-          <option value="kn">Kannada</option>
-        </select>
-      </div>
+      
       <div className="glass-card max-w-5xl mx-auto bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/30 dark:border-white/20 rounded-xl shadow-md text-gray-900 dark:text-gray-100 p-6">
         
         {/* 🔁 Header with Image Slideshow */}

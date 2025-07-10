@@ -9,6 +9,8 @@ import ScrollToTop from './components/ScrollToTop';
 import ChatBot from './pages/ChatBot';
 import AIPhotoBooth from './components/AIPhotoBooth';
 import { ThemeProvider } from './context/ThemeContext';
+import About from './pages/About';
+import Contactpage from './pages/Contactpage';
 import './App.css';
 
 
@@ -26,6 +28,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<IndianMap />} />
           <Route path="/forts/:stateName" element={<FortsList />} />
+           <Route path="/about" element={<About />} />
+           <Route path="/contact" element={<Contactpage />} /> 
+           
           
           <Route path="/fort/:slug" element={<FortDetailPage />} />
           <Route path="/chatbot" element={<ChatBot />} />
