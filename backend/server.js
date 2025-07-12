@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const { GoogleAuth } = require('google-auth-library');
 const axios = require('axios');
-require('dotenv').config();
+require('dotenv').config(); // ✅ Load .env variables
 
 const app = express();
 
@@ -12,15 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/fortsDB', {
+// ✅ MongoDB Atlas Connection
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 })
-.then(() => console.log("✅ MongoDB connected"))
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
 .catch(err => console.error("❌ MongoDB connection error:", err));
 
-// Serve Images
+// Serve Static Images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Google Auth (for Gemini)
@@ -29,13 +29,11 @@ const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform',
 });
 
-// Route Imports
+// API Routes
 const fortRoutes = require('./routes/forts');
 const reviewRoutes = require('./routes/reviews');
-
-// API Routes
 app.use('/api/forts', fortRoutes);
-app.use('/api/reviews', reviewRoutes); // ✅ Must come *after* middleware and DB connection
+app.use('/api/reviews', reviewRoutes);
 
 // Gemini Chat Route
 app.post('/chat', async (req, res) => {
