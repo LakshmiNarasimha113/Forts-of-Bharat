@@ -1,109 +1,106 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { Send, Mic, Square, Languages, MessageSquare } from 'lucide-react';
-
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
+import { Send, Mic, Square, MessageSquare } from 'lucide-react';
 
 export default function ChatBot() {
   const [message, setMessage] = useState('');
   const [chatLog, setChatLog] = useState([]);
   const [language, setLanguage] = useState('en-IN');
   const [voices, setVoices] = useState([]);
-  const [selectedVoiceURI, setSelectedVoiceURI] = useState('');
+  const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef(null);
 
   const suggestedQueries = [
     "Tell me about Golkonda Fort",
-    "Best forts to visit in Rajasthan",
-    "History of Raigad Fort",
-    "Forts built by Chhatrapati Shivaji",
-    "Forts with 360° virtual tours"
+    "Plan a trip to Raigad Fort",
+    "गोलकोंडा किले के बारे में बताइए",
+    "గోల్కొండ కోటకు ట్రిప్ ప్లాన్ చేయండి"
   ];
 
-  useEffect(() => {
-    const loadVoices = () => {
-      const allVoices = speechSynthesis.getVoices();
-      setVoices(allVoices);
-      const preferred = allVoices.find((v) => v.lang === language);
-      if (preferred) setSelectedVoiceURI(preferred.voiceURI);
-      else if (!selectedVoiceURI && allVoices.length) setSelectedVoiceURI(allVoices[0].voiceURI);
-    };
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-  }, [language, selectedVoiceURI]);
+useEffect(() => {
+  const loadVoices = () => {
+    const availableVoices = speechSynthesis.getVoices();
+    setVoices(availableVoices);
+    const matching = availableVoices.find(v => v.lang === language);
+    setSelectedVoice(matching || null); // null if not supported
+  };
+
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}, [language]);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatLog]);
 
-  const speak = (text) => {
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voice = voices.find((v) => v.voiceURI === selectedVoiceURI);
-    if (voice) utterance.voice = voice;
-    utterance.lang = language;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    speechSynthesis.speak(utterance);
+  const cleanText = (text) => {
+    return text.replace(/\*+/g, '').replace(/\n{3,}/g, '\n\n').trim();
   };
 
-  const stopSpeech = () => {
+  const speak = (text) => {
     speechSynthesis.cancel();
-    setIsSpeaking(false);
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = language;
+    if (selectedVoice) utter.voice = selectedVoice;
+
+    utter.onstart = () => setIsSpeaking(true);
+    utter.onend = () => setIsSpeaking(false);
+    utter.onerror = () => setIsSpeaking(false);
+
+    speechSynthesis.speak(utter);
   };
 
   const sendMessage = async () => {
     const trimmed = message.trim();
     if (!trimmed) return;
 
-    setChatLog((prev) => [...prev, { user: trimmed, bot: '...' }]);
+    setChatLog(prev => [...prev, { user: trimmed, bot: '...' }]);
     setMessage('');
 
     try {
-      const res = await axios.post('http://localhost:5000/chat', { message: trimmed, language });
-      const botReply = res.data.reply;
-
-      setChatLog((prev) => {
-        const newLog = [...prev];
-        newLog[newLog.length - 1].bot = botReply;
-        return newLog;
+      const res = await fetch('http://localhost:5000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed, language })
       });
+
+      const data = await res.json();
+      const botReply = cleanText(data.reply);
+
+      setChatLog(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1].bot = botReply;
+        return updated;
+      });
+
       speak(botReply);
     } catch (err) {
       const fail = 'Sorry, something went wrong.';
-      setChatLog((prev) => {
-        const newLog = [...prev];
-        newLog[newLog.length - 1].bot = fail;
-        return newLog;
+      setChatLog(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1].bot = fail;
+        return updated;
       });
       speak(fail);
     }
   };
 
   const handleMicInput = () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = language;
     recognition.start();
     recognition.onresult = (e) => setMessage(e.results[0][0].transcript);
   };
 
   return (
-   <div className="h-screen overflow-hidden flex justify-center items-start pt-16 px-4 bg-gradient-to-br from-[#1e293b] via-[#334155] to-[#0f172a] text-white">
-      <div className="w-full max-w-4xl h-[calc(100vh-4rem)] flex flex-col rounded-3xl overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl shadow-[0_0_60px_-10px_rgba(255,255,255,0.15)] animate-fadeIn">
-        
-        {/* Header */}
+    <div className="h-screen overflow-hidden flex justify-center items-start pt-16 px-4 bg-gradient-to-br from-[#1e293b] via-[#334155] to-[#0f172a] text-white">
+      <div className="w-full max-w-4xl h-[calc(100vh-4rem)] flex flex-col rounded-3xl overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl shadow-lg animate-fadeIn">
         <div className="text-center p-6 bg-white/10 border-b border-white/10">
-          <h2 className="text-3xl font-bold text-white drop-shadow tracking-wide">
-            🛡️ Forts of Bharath Chat Assistant
-          </h2>
-          <p className="text-sm text-slate-300 mt-1">Ask anything about Indian forts 🏰</p>
+          <h2 className="text-3xl font-bold text-white drop-shadow tracking-wide">🛡️ Forts of Bharath Chat Assistant</h2>
+          <p className="text-sm text-slate-300 mt-1">Ask about Indian forts – history, travel tips, trip planning 🏰</p>
         </div>
 
-        {/* Suggested Queries */}
         <div className="flex flex-wrap justify-center gap-3 px-6 pt-4 text-sm">
           {suggestedQueries.map((query, idx) => (
             <button
@@ -117,7 +114,6 @@ export default function ChatBot() {
           ))}
         </div>
 
-        {/* Chat Window */}
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
           {chatLog.length === 0 && (
             <p className="text-center text-slate-400 italic mt-10">Start a conversation about Indian forts...</p>
@@ -139,10 +135,8 @@ export default function ChatBot() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Section */}
         <div className="p-4 border-t border-white/10 bg-black/10 backdrop-blur-md">
           <div className="flex items-center gap-3">
-            {/* Language Picker */}
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -151,20 +145,23 @@ export default function ChatBot() {
               <option value="en-IN">English</option>
               <option value="hi-IN">Hindi</option>
               <option value="te-IN">Telugu</option>
+              <option value="ta-IN">Tamil</option>
+              <option value="kn-IN">Kannada</option>
+              <option value="ml-IN">Malayalam</option>
+              <option value="mr-IN">Marathi</option>
+              <option value="gu-IN">Gujarati</option>
+              <option value="bn-IN">Bengali</option>
             </select>
 
-            {/* Input Field */}
-           <input
-  type="text"
-  value={message}
-  onChange={(e) => setMessage(e.target.value)}
-  onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-  placeholder="Type or speak your question..."
-  className="flex-1 px-4 py-2 rounded-full bg-white/90 text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-md placeholder-slate-500"
-/>
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+              placeholder="Type or speak your question..."
+              className="flex-1 px-4 py-2 rounded-full bg-white/90 text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-md placeholder-slate-500"
+            />
 
-
-            {/* Send Button */}
             <button
               onClick={sendMessage}
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium shadow-lg transition-all"
@@ -174,27 +171,33 @@ export default function ChatBot() {
               Send
             </button>
 
-            {/* Mic Button */}
-            <button
-              onClick={handleMicInput}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
-              title="Start Voice Input"
-            >
-              <Mic size={18} />
-              Speak
-            </button>
+            {/* Speak Button */}
+<button
+  onClick={handleMicInput}
+  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
+  title="Start Voice Input"
+>
+  <Mic size={18} />
+  Speak
+</button>
 
-            {/* Stop Button */}
-            {isSpeaking && (
-              <button
-                onClick={stopSpeech}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
-                title="Stop Speaking"
-              >
-                <Square size={18} />
-                Stop
-              </button>
-            )}
+{/* TTS Stop Button */}
+{isSpeaking && selectedVoice && (
+  <button
+    onClick={() => {
+      speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }}
+    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition-all"
+    title="Stop Speaking"
+  >
+    <Square size={18} />
+    Stop
+  </button>
+)}
+
+
+
           </div>
         </div>
       </div>
