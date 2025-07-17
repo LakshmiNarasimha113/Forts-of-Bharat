@@ -1,12 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null);
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
     window.scrollTo(0, 0);
   }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(null);
+    try {
+      const response = await axios.post("http://localhost:5000/api/contact", formData);
+      if (response.status === 201) {
+  setSuccess("Message sent successfully!");
+  setFormData({ name: "", email: "", message: "" });
+} else {
+  setSuccess("Something went wrong. Please try again.");
+}
+
+    } catch (error) {
+      setSuccess("Server error. Please try again later.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="pt-24 pb-16 px-6 min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -27,11 +61,15 @@ const ContactPage = () => {
           data-aos="zoom-in"
         >
           {/* Contact Form */}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium mb-1">Your Name</label>
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
                 className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600"
                 placeholder="John Doe"
               />
@@ -41,6 +79,10 @@ const ContactPage = () => {
               <label className="block text-sm font-medium mb-1">Email Address</label>
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
                 className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-600"
                 placeholder="example@domain.com"
               />
@@ -49,7 +91,11 @@ const ContactPage = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Message</label>
               <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 rows="4"
+                required
                 className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-400 dark:focus:ring-pink-600"
                 placeholder="How can we help you?"
               />
@@ -57,10 +103,17 @@ const ContactPage = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-purple-600 hover:to-blue-500 text-white font-semibold shadow-md hover:shadow-xl transition-all duration-300"
             >
-              📤 Send Message
+              {loading ? "Sending..." : "📤 Send Message"}
             </button>
+
+            {success && (
+              <div className="text-center mt-4 text-sm text-green-600 dark:text-green-400">
+                {success}
+              </div>
+            )}
           </form>
 
           {/* Contact Info */}

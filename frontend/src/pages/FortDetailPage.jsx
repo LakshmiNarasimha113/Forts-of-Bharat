@@ -293,7 +293,7 @@ const FortDetailPage = () => {
     className="mb-16 bg-[#f8f9fa] dark:bg-gradient-to-br dark:from-[#0d1117] dark:to-[#1f2937] p-8 md:p-10 rounded-3xl shadow-2xl border border-yellow-300 dark:border-yellow-600"
   >
     <h2 className="text-3xl font-bold text-[#1e3a8a] dark:text-yellow-400 mb-6 flex items-center gap-3">
-      🖼️ Pose at the Fort!-
+      🖼️ Pose at the Fort !
     </h2>
 
     <div className="flex flex-col lg:flex-row gap-10 items-start">

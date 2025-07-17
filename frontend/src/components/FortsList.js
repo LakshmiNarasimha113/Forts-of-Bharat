@@ -165,7 +165,7 @@ const fortsData = {
   { "_id": "114", "name": "Khammam Fort", "slug": "khammam-fort", "image": "/images/khammam.webp" },
   { "_id": "115", "name": "Rachakonda Fort", "slug": "rachakonda-fort", "image": "/images/Rachakonda1.jpg" }
 ],
-"tripura": [
+"trip ura": [
   { "_id": "116", "name": "Ujjayanta Palace Fort", "slug": "ujjayanta-palace", "image": "/images/ujjayanta.jpg" },
   { "_id": "117", "name": "Neermahal Fort", "slug": "neermahal-fort", "image": "/images/neermahal.jpg" },
   { "_id": "118", "name": "Old Agartala Fort", "slug": "old-agartala-fort", "image": "/images/oldagartala.jpg" },
@@ -185,13 +185,6 @@ const fortsData = {
   { "_id": "128", "name": "Chandpur Fort", "slug": "chandpur-fort", "image": "/images/chandpur.jpg" },
   { "_id": "129", "name": "Askot Fort", "slug": "askot-fort", "image": "/images/askot.jpg" },
   { "_id": "130", "name": "Pithoragarh Fort", "slug": "pithoragarh-fort", "image": "/images/pithoragarh.jpg" }
-],
-"westbengal": [
-  { "_id": "131", "name": "Hazarduari Fort", "slug": "hazarduari-fort", "image": "/images/hazarduari.jpg" },
-  { "_id": "132", "name": "Fort William", "slug": "fort-william", "image": "/images/fortwilliam.jpg" },
-  { "_id": "133", "name": "Bishnupur Fort", "slug": "bishnupur-fort", "image": "/images/bishnupurwb.jpg" },
-  { "_id": "134", "name": "Cooch Behar Fort", "slug": "cooch-behar-fort", "image": "/images/coochbehar.jpg" },
-  { "_id": "135", "name": "Jalpaiguri Fort", "slug": "jalpaiguri-fort", "image": "/images/jalpaiguri.jpg" }
 ],
 "andaman and nicobar": [
   { "_id": "136", "name": "Cellular Jail", "slug": "cellular-jail", "image": "/images/cellular.jpg" },
@@ -255,8 +248,15 @@ const fortsData = {
   { "_id": "178", "name": "Bellary Fort", "slug": "bellary-fort", "image": "/images/bellary.jpg" },
   { "_id": "179", "name": "Gooty Fort", "slug": "gooty-fort", "image": "/images/gooty.jpg" },
   { "_id": "180", "name": "Kittur Fort", "slug": "kittur-fort", "image": "/images/kittur.jpg" }
-]
+],
 
+"west bengal": [
+  { "_id": "181", "name": "Fort William", "slug": "fort-william", "image": "/images/fort-william.jpg" },
+  { "_id": "182", "name": "Kurumbera Fort", "slug": "kurumbera-fort", "image": "/images/kurumbera.jpg" },
+  { "_id": "183", "name": "Nalhati Fort", "slug": "nalhati-fort", "image": "/images/nalhati.jpg" },
+  { "_id": "184", "name": "Mangarh Fort", "slug": "mangarh-fort", "image": "/images/mangarh.jpg" },
+  { "_id": "185", "name": "Tamluk Fort", "slug": "tamluk-fort", "image": "/images/tamluk.jpg" }
+]
 
 
 

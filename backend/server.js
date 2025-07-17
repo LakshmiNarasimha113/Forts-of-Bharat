@@ -32,10 +32,14 @@ const auth = new GoogleAuth({
 // Route Imports
 const fortRoutes = require('./routes/forts');
 const reviewRoutes = require('./routes/reviews');
+const contactRoutes = require('./routes/contact');
 
 // API Routes
 app.use('/api/forts', fortRoutes);
 app.use('/api/reviews', reviewRoutes); // ✅ Must come *after* middleware and DB connection
+app.use('/api/contact', contactRoutes);
+
+
 
 // Gemini Chat Route
 app.post('/chat', async (req, res) => {
