@@ -707,7 +707,6 @@ const FortDetailPage = () => {
     Download Fort Info as PDF
   </button>
 </div>
-<ReviewSection fortSlug={fort.slug} />
 
 
         {/* Chatbot Floating Button */}
