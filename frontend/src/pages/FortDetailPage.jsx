@@ -87,7 +87,7 @@ const FortDetailPage = () => {
   useEffect(() => {
     const fetchFort = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/forts/${slug}`);
+         const res = await axios.get(`https://forts-of-bharat.onrender.com/api/forts/${slug}`);
         setFort(res.data);
       } catch (error) {
         console.error('Error fetching fort:', error);
@@ -707,6 +707,7 @@ const FortDetailPage = () => {
     Download Fort Info as PDF
   </button>
 </div>
+<ReviewSection fortSlug={fort.slug} />
 
 
         {/* Chatbot Floating Button */}
