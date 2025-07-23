@@ -2,7 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Fort = require('../models/fortModel'); // Adjust path if needed
 
-// GET fort by slug
+// ✅ GET all forts
+router.get('/', async (req, res) => {
+  try {
+    const forts = await Fort.find();
+    res.json(forts);
+  } catch (err) {
+    console.error('Error fetching forts:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ✅ GET single fort by slug
 router.get('/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
