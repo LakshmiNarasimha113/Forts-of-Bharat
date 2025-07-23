@@ -4,12 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const { GoogleAuth } = require('google-auth-library');
 const axios = require('axios');
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 863e2383553866af672433c3ae273360cb80d2a5
 require('dotenv').config(); // ✅ Load .env variables
 
 const app = express();
@@ -38,16 +32,13 @@ const auth = new GoogleAuth({
 // API Routes
 const fortRoutes = require('./routes/forts');
 const reviewRoutes = require('./routes/reviews');
-<<<<<<< HEAD
 const contactRoutes = require('./routes/contact');
 
+// API Routes
 app.use('/api/forts', fortRoutes);
-app.use('/api/reviews', reviewRoutes);
+app.use('/api/reviews', reviewRoutes); // ✅ Must come *after* middleware and DB connection
 app.use('/api/contact', contactRoutes);
-=======
-app.use('/api/forts', fortRoutes);
-app.use('/api/reviews', reviewRoutes);
->>>>>>> 863e2383553866af672433c3ae273360cb80d2a5
+
 
 // Gemini Chat Route
 app.post('/chat', async (req, res) => {
