@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '5500:5500'
+    environment:
+      - MONGO_URI=mongodb+srv://chatalakshminarasimha:anandyadav@cluster0.l9fabx3.mongodb.net/fortsDB?retryWrites=true&w=majority&appName=Cluster0
+      - NODE_ENV=production
+    depends_on:
+      - frontend
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:80'
+    depends_on:
+      - backend
